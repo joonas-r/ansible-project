@@ -3,7 +3,7 @@ Configuration management project using Ansible for Haaga-Helia's Server Manageme
 
 ## How to get it working (Windows)
 
-ansible-playbook --user <käyttäjä> --become-user <käyttäjä> --ask-become-pass site.yml
+ansible-playbook --user käyttäjä --become-user käyttäjä --ask-become-pass site.yml
 
 ### Hallittava kone: 
 
@@ -26,7 +26,7 @@ ansible-playbook --user <käyttäjä> --become-user <käyttäjä> --ask-become-p
     ansible_winrm_transport=ntlm
     ```
 - Konfiguroitu tässä tehtävässä käyttämään SSH-yhteyttä
-  - hosts: <ip osoite>:22
+  - hosts: ip osoite:22
   ```
   ansible_connection=ssh
   ansible_shell_type=powershell
@@ -51,10 +51,14 @@ ansible-playbook --user <käyttäjä> --become-user <käyttäjä> --ask-become-p
 - Yhdistä kone verkkoon
 - Powershell: Run as admin
 
-```
+``` 
+# Ota palvelu käyttöön
 Add-WindowsCapability -Online -Name OpenSSH.Server*
 
+# Käynnistä palvelu ja aseta käynnistymään automaattisesti
 Start-Service -Name sshd
+Set-Service -Name sshd -StartupType Automatic
 
+# Uusi sääntö palomuuriin 
 New-NetFirewallRule -Name 'ssh-in-TCP' -DisplayName 'Inbound rule for SSH Server (sshd) on TCP port 22' -Action Allow -Direction Inbound -Enabled True -Profile Any -Protocol 'TCP' -LocalPort 22
 ```
