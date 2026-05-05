@@ -1,0 +1,86 @@
+# uptodate
+- name: Update and upgrade system packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+    autoremove: yes
+
+- name: Install required packages
+  apt:
+    name:
+      - gnupg
+      - curl
+      - ca-certificates
+    state: present
+
+- name: Create keyring directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+# MongoDB 8.0 Repo
+- name: Download MongoDB GPG key
+  get_url:
+    url: https://www.mongodb.org/static/pgp/server-8.0.asc
+    dest: /tmp/mongodb-server-8.0.asc
+    mode: "0644"
+
+- name: Convert MongoDB key to keyring format
+  command: gpg --dearmor -o /etc/apt/keyrings/mongodb-server-8.0.gpg /tmp/mongodb-server-8.0.asc
+  args:
+    creates: /etc/apt/keyrings/mongodb-server-8.0.gpg
+
+- name: Add MongoDB repository
+  copy:
+    dest: /etc/apt/sources.list.d/mongodb-org-8.0.sources
+    mode: "0644"
+    content: |
+      Types: deb
+      URIs: https://repo.mongodb.org/apt/debian
+      Suites: bookworm/mongodb-org/8.0
+      Components: main
+      Architectures: amd64
+      Signed-By: /etc/apt/keyrings/mongodb-server-8.0.gpg
+      Enabled: true
+
+# UniFi Repo
+
+- name: Download UniFi GPG key
+  get_url:
+    url: https://dl.ui.com/unifi/unifi-repo.gpg
+    dest: /etc/apt/keyrings/unifi-repo.gpg
+    mode: "0644"
+
+- name: Add UniFi repository
+  copy:
+    dest: /etc/apt/sources.list.d/unifi.sources
+    mode: "0644"
+    content: |
+      Types: deb
+      URIs: https://www.ui.com/downloads/unifi/debian
+      Suites: stable
+      Components: ubiquiti
+      Architectures: amd64
+      Signed-By: /etc/apt/keyrings/unifi-repo.gpg
+      Enabled: true
+
+# Install packages
+- name: Update apt cache after adding repos
+  apt:
+    update_cache: yes
+
+- name: Install MongoDB and UniFi
+  apt:
+    name:
+      - mongodb-org
+      - unifi
+    state: present
+- name: Allow UniFi GUI / API
+  ufw:
+    rule: allow
+# GUI port might be also 8080   
+    port: "8843"
+    proto: tcp
+  become: true
+

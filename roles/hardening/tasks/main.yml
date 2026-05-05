@@ -1,0 +1,119 @@
+---
+
+
+# System updates
+
+- name: Update package cache (Debian/Ubuntu)
+  apt:
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+- name: Upgrade system (Debian/Ubuntu)
+  apt:
+    upgrade: dist
+  when: ansible_os_family == "Debian"
+
+- name: Update system (Arch)
+  pacman:
+    update_cache: yes
+    upgrade: yes
+  when: ansible_distribution == "Archlinux"
+
+# Install packages
+
+- name: Install packages (Debian/Ubuntu)
+  apt:
+    name:
+      - ufw
+      - fail2ban
+      - unattended-upgrades
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install packages (Arch)
+  pacman:
+    name:
+      - ufw
+      - fail2ban
+    state: present
+  when: ansible_distribution == "Archlinux"
+
+#  Firewall
+
+- name: Enable UFW 
+  ufw:
+    state: enabled
+    policy: deny
+
+- name: Allow SSH 
+  ufw:
+    rule: limit
+    port: "{{ ssh_port }}"
+    proto: tcp
+
+# Fail2Ban
+
+
+- name: Enable fail2ban
+  service:
+    name: fail2ban
+    state: started
+    enabled: true
+  notify: Restart fail2ban
+
+
+#  Sysctl hardening
+
+- name: Apply kernel hardening settings
+  copy:
+    dest: /etc/sysctl.d/99-hardening.conf
+    mode: "0644"
+    content: |
+      net.ipv4.ip_forward = 0
+      net.ipv4.conf.all.send_redirects = 0
+      net.ipv4.conf.all.accept_redirects = 0
+      net.ipv4.conf.all.accept_source_route = 0
+      net.ipv4.conf.all.log_martians = 1
+      net.ipv4.icmp_echo_ignore_broadcasts = 1
+      net.ipv4.icmp_ignore_bogus_error_responses = 1
+      net.ipv4.tcp_syncookies = 1
+      net.ipv4.conf.all.rp_filter = 1
+      net.ipv4.conf.default.rp_filter = 1
+      kernel.randomize_va_space = 2
+  notify: Reload sysctl
+
+# SSH HARDENING
+
+- name: Harden SSH config safely
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    marker: "# {mark} ANSIBLE HARDENING"
+    block: |
+      Port {{ ssh_port }}
+      PermitRootLogin {{ 'no' if disable_root_login else 'yes' }}
+      PasswordAuthentication {{ 'no' if allow_password_auth else 'yes' }}
+      PermitEmptyPasswords no
+      X11Forwarding no
+      MaxAuthTries 3
+      ClientAliveInterval 300
+      ClientAliveCountMax 2
+  notify: Reload SSH
+
+
+#  Validate SSH 
+
+- name: Validate SSH config
+  command: sshd -t
+  register: ssh_check
+  changed_when: false
+  failed_when: ssh_check.rc != 0
+
+
+#  Unattended upgrades 
+
+- name: Enable unattended upgrades
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: |
+      APT::Periodic::Update-Package-Lists "1";
+      APT::Periodic::Unattended-Upgrade "1";
+  when: ansible_os_family == "Debian"

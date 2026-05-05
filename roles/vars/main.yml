@@ -1,0 +1,8 @@
+unifi_repo_key_url: "https://dl.ui.com/unifi/unifi-repo.gpg"
+unifi_repo_url: "deb https://www.ui.com/downloads/unifi/debian stable ubiquiti"
+required_packages:
+  - ca-certificates
+  - apt-transport-https
+  - gnupg
+  - openjdk-17-jre-headless
+

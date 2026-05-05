@@ -1,0 +1,24 @@
+---
+# -------------------------
+# SYSCTL reload
+# -------------------------
+- name: Reload sysctl
+  command: sysctl --system
+
+
+# -------------------------
+# SSH restart 
+# -------------------------
+- name: Reload SSH
+  service:
+    name: "{{ 'ssh' if ansible_os_family == 'Debian' else 'sshd' }}"
+    state: restarted
+
+
+# -------------------------
+# Fail2Ban restart 
+# -------------------------
+- name: Restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted

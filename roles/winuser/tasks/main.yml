@@ -1,0 +1,34 @@
+- name: Hello admin user
+  ansible.windows.win_user:
+    name: "{{win_admin}}"
+    groups: Administrators
+    groups_action: add
+    password: "{{win_admin_pass}}"
+    update_password: on_create
+    state: present
+  when: ansible_os_family == "Windows"
+
+- name: Hello admin profile
+  ansible.windows.win_user_profile: 
+    name: "{{win_admin}}"
+    username: Hello_admin
+    state: present
+  when: ansible_os_family == "Windows"
+    
+- name: Hello user
+  ansible.windows.win_user:
+    name: "{{win_user}}"
+    groups: Users
+    groups_action: add
+    password: "{{win_user_pass}}"
+    update_password: on_create
+    state: present
+  when: ansible_os_family == "Windows"
+
+- name: Hello user profile
+  ansible.windows.win_user_profile: 
+    name: "{{win_user}}"
+    username: Hello_user
+    state: present
+  when: ansible_os_family == "Windows"
+ 

@@ -1,0 +1,18 @@
+- name: Install critical updates
+  ansible.windows.win_updates: 
+    category_names: 
+      - CriticalUpdates
+      - SecurityUpdates
+    state: installed
+    reboot: true
+
+# - name: change ssh folder owner
+#   ansible.windows.win_owner: 
+#     path: '%ProgramData'\ssh\
+#     recurse: true
+#     user: hello_admin
+
+- name: restart sshd
+  ansible.windows.win_service: 
+    name: sshd
+    state: restarted

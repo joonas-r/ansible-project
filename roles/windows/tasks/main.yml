@@ -1,0 +1,69 @@
+    
+- name: Enable OpenSSH
+  ansible.windows.win_service: 
+    name: sshd
+    start_mode: auto
+    state: started
+  when: ansible_os_family == "Windows"
+      
+- name: Copy public key to hello_admin
+  ansible.windows.win_copy:
+    content: "{{my_public_key}}"
+    dest: '%ProgramData%\ssh\administrators_authorized_keys'
+    force: false
+  when: ansible_os_family == "Windows"
+
+- name: disallow password login on remote host
+  ansible.windows.win_copy:
+    src: sshd_config 
+    dest: '%ProgramData%\ssh\sshd_config'
+    force: True
+  notify: restart sshd
+  when: ansible_os_family == "Windows"
+
+- ansible.windows.win_region:
+    location: 77 #Finland
+  when: ansible_os_family == "Windows"
+
+- ansible.windows.win_timezone: 
+    timezone: FLE Standard Time
+  when: ansible_os_family == "Windows"
+  
+- name: Download all updates
+  ansible.windows.win_updates:
+    category_names: '*' 
+    state: downloaded
+  notify: Install critical updates
+  when: ansible_os_family == "Windows"
+
+#- name: Delete Edge
+#  ansible.windows.win_package:
+#    product_id: 'Microsoft Edge'
+##    product_id: 'Microsoft.MicrosoftEdge.Stable'
+#    path: 'C:\Program Files (x86)\Microsoft\Edge\Application\147.0.3912.98\Installer\setup.exe'
+#    arguments: --uninstall --msedge --system-level --force-uninstall
+#    state: absent
+#    provider: auto
+
+- name: Install Firefox
+  ansible.windows.win_package: 
+    path: 'https://download.mozilla.org/?product=firefox-msi-latest-ssl&os=win64&lang=en-US'
+    product_id: "Mozilla Firefox"
+    creates_path: 'C:\Program Files\Mozilla Firefox'
+    state: present
+    arguments: /quiet
+    wait_for_children: true
+  when: ansible_os_family == "Windows"
+
+- name: Delete Bing apps
+  ansible.windows.win_package: 
+    product_id: "{{ item.product_id }}"
+    state: absent
+    provider: auto 
+  loop:
+    - { product_id: 'Microsoft.BingSearch'}
+    - { product_id: 'Microsoft.BingWeather'}
+    - { product_id: 'Microsoft.BingNews'}
+  when: ansible_os_family == "Windows"
+
+
