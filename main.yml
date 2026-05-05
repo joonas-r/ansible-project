@@ -1,0 +1,27 @@
+---
+
+- name: Base setup
+  hosts: all
+  become: true
+  vars_files:
+    - vars/baseline.yml
+
+
+- name: Createuser
+  become: true
+  hosts: old
+  vars_files:
+    - vars/baseline.yml
+  roles:
+    - role: adduser
+
+
+- name: Run hardening as new user
+  become: true
+  hosts: new
+  vars_files:
+    - vars/baseline.yml
+  roles:
+    - role: hardening
+      vars:
+        username: "{{ username }}"

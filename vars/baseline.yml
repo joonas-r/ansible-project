@@ -1,0 +1,18 @@
+
+# User config
+
+hostname: kipup
+username: kipup
+old_username: blanc
+
+ips:
+  - 10.10.40.50
+  - 10.10.40.54
+
+# Other
+
+ssh_port: 22
+ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIvu5QrCt4b+yQaZZNUmLDF2/OzZNszfJ2rDOYw2o9W gman@anomalous"
+#admin_user: "{{ username }}"
+disable_root_login: true
+allow_password_auth: false   
