@@ -6,6 +6,15 @@ Configuration management project using Ansible for Haaga-Helia's Server Manageme
 Tämän pelikirjan tarkoitus on asettaa hallittaville koneille perustason konfiguraatio riippumatta siitä, millä käyttöjärjestelmällä ne toimivat. 
 Tämä pelikirja toimii Debianilla, Ubuntulla, Arch Linuxilla ja Windowsilla. 
 
+### Windows
+- Luo kaksi uutta käyttäjää ja käyttäjäprofiilia, joista toinen on admin
+- Asettaa sijainnin ja aikavyöhykkeen Suomeen
+- Hakee päivitykset Windows updatesta, ja asentaa kriittiset ja tietoturvapäivitykset heti
+- Asentaa Firefoxin
+- Poistaa Bing-haun
+- Varmistaa sshd-palvelun olevan päällä ja käynnistyvän automaattisesti
+- Lisää sshd-palveluun avaimen ja poistaa mahdollisuuden kirjautua salasanalla
+
 ## Miten tämä toimii (Windows)
 
 ansible-playbook --user käyttäjä --become-user käyttäjä --ask-become-pass site.yml
