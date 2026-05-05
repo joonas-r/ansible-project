@@ -1,7 +1,12 @@
 # ansible-project
 Configuration management project using Ansible for Haaga-Helia's Server Management course 
 
-## How to get it working (Windows)
+## Mikä tämä on?
+
+Tämän pelikirjan tarkoitus on asettaa hallittaville koneille perustason konfiguraatio riippumatta siitä, millä käyttöjärjestelmällä ne toimivat. 
+Tämä pelikirja toimii Debianilla, Ubuntulla, Arch Linuxilla ja Windowsilla. 
+
+## Miten tämä toimii (Windows)
 
 ansible-playbook --user käyttäjä --become-user käyttäjä --ask-become-pass site.yml
 
