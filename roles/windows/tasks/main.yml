@@ -4,14 +4,14 @@
     name: sshd
     start_mode: auto
     state: started
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
       
 - name: Copy public key to hello_admin
   ansible.windows.win_copy:
     content: "{{my_public_key}}"
     dest: '%ProgramData%\ssh\administrators_authorized_keys'
     force: false
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - name: disallow password login on remote host
   ansible.windows.win_copy:
@@ -19,22 +19,22 @@
     dest: '%ProgramData%\ssh\sshd_config'
     force: True
   notify: restart sshd
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - ansible.windows.win_region:
     location: 77 #Finland
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - ansible.windows.win_timezone: 
     timezone: FLE Standard Time
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
   
 - name: Download all updates
   ansible.windows.win_updates:
     category_names: '*' 
     state: downloaded
   notify: Install critical updates
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 #- name: Delete Edge
 #  ansible.windows.win_package:
@@ -53,7 +53,7 @@
     state: present
     arguments: /quiet
     wait_for_children: true
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - name: Delete Bing apps
   ansible.windows.win_package: 
@@ -64,6 +64,6 @@
     - { product_id: 'Microsoft.BingSearch'}
     - { product_id: 'Microsoft.BingWeather'}
     - { product_id: 'Microsoft.BingNews'}
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 

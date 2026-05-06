@@ -1,27 +1,42 @@
 ---
-
-- name: Base setup
-  hosts: all
+# Linux base
+- name: Base setup (Linux only)
+  hosts: old:new
   become: true
+  gather_facts: true
   vars_files:
     - vars/baseline.yml
 
 
-- name: Createuser
-  become: true
+# Create user 
+- name: Create user on old systems
   hosts: old
+  become: true
   vars_files:
     - vars/baseline.yml
   roles:
-    - role: adduser
+    - adduser
 
 
-- name: Run hardening as new user
-  become: true
+# Hardening new systems
+- name: Hardening new systems
   hosts: new
+  become: true
   vars_files:
     - vars/baseline.yml
   roles:
     - role: hardening
       vars:
         username: "{{ username }}"
+
+
+# Windows
+- name: Windows setup
+  hosts: windows
+  gather_facts: false
+  vars_files:
+    - vars/baseline.yml
+
+  roles:
+    - winuser
+    - windows

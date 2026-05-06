@@ -1,6 +1,0 @@
-- hosts: windows
-  become: true
-  become_method: runas
-  roles:
-    - winuser
-    - windows
