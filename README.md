@@ -23,12 +23,15 @@ Different implementations are currently in progress.
 
 ---
 ## Using the tool
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-git clone <repo>
+```
+git clone https://github.com/joonas-r/ansible-project
+```
 cd baseline
 # configure your settings file
 # run the setup
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+```
+ ansible-playbook -i h1.py main.yml -k -K
+```
 ---
 
 ## Setup Walkthroughs
