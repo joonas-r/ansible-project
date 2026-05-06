@@ -6,14 +6,14 @@
     password: "{{win_admin_pass}}"
     update_password: on_create
     state: present
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - name: Hello admin profile
   ansible.windows.win_user_profile: 
     name: "{{win_admin}}"
     username: "{{win_admin}}"
     state: present
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
     
 - name: Hello user
   ansible.windows.win_user:
@@ -23,12 +23,16 @@
     password: "{{win_user_pass}}"
     update_password: on_create
     state: present
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
 
 - name: Hello user profile
   ansible.windows.win_user_profile: 
     name: "{{win_user}}"
+<<<<<<< HEAD
     username: "{{win_user}}"
+=======
+    username: "{{win_admin}}"
+>>>>>>> c9343c4 (Working)
     state: present
-  when: ansible_os_family == "Windows"
+  when: "'windows' in group_names"
  

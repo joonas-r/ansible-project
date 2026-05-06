@@ -1,18 +1,38 @@
-
-# User config
-
+# -------------------------
+# Linux settings
+# -------------------------
 hostname: kipup
 username: kipup
 old_username: blanc
 
+#For more hosts add ips
 ips:
-  - 10.10.40.50
-  - 10.10.40.54
-
-# Other
+  - 10.10.40.63
 
 ssh_port: 22
+
 ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIvu5QrCt4b+yQaZZNUmLDF2/OzZNszfJ2rDOYw2o9W gman@anomalous"
-#admin_user: "{{ username }}"
+
 disable_root_login: true
-allow_password_auth: false   
+allow_password_auth: false
+
+
+# -------------------------
+# Windows settings
+# -------------------------
+win_admin: blanc
+win_user: blanc
+win_admin_pass: salasana
+win_user_pass: salasana
+
+#For more hosts add ips
+windows_ips:
+  - 10.10.40.70
+
+wssh_port: 22
+
+my_public_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDIvu5QrCt4b+yQaZZNUmLDF2/OzZNszfJ2rDOYw2o9W gman@anomalous"
+
+tempdir: 'C:\\Windows\\Temp'
+
+ansible_winrm_transport: ntlm
