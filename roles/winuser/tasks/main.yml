@@ -28,11 +28,8 @@
 - name: Hello user profile
   ansible.windows.win_user_profile: 
     name: "{{win_user}}"
-<<<<<<< HEAD
     username: "{{win_user}}"
-=======
     username: "{{win_admin}}"
->>>>>>> c9343c4 (Working)
     state: present
   when: "'windows' in group_names"
  
