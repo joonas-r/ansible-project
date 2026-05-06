@@ -11,7 +11,7 @@
 - name: Hello admin profile
   ansible.windows.win_user_profile: 
     name: "{{win_admin}}"
-    username: Hello_admin
+    username: "{{win_admin}}"
     state: present
   when: ansible_os_family == "Windows"
     
@@ -28,7 +28,7 @@
 - name: Hello user profile
   ansible.windows.win_user_profile: 
     name: "{{win_user}}"
-    username: Hello_user
+    username: "{{win_user}}"
     state: present
   when: ansible_os_family == "Windows"
  
