@@ -157,3 +157,8 @@ sudo pacman -S openssh
 sudo systemctl enable sshd
 sudo systemctl start sshd
 ```
+
+
+## What next
+
+Suggestion of improvements for the Windows part (in Finnish) can be found in: https://github.com/joonas-r/tk-palvelinten-hallinta/blob/main/projekti.md
